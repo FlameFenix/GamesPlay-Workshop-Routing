@@ -1,6 +1,11 @@
 const baseUrl = 'http://localhost:3030/'
 
 export const getAll = () => {
-   return fetch(baseUrl + 'data/games')
-    .then(res => res.json())
+    return fetch(baseUrl + 'data/games')
+        .then(res => res.json())
+}
+
+export const getOne = (gameId) => {
+    return fetch(baseUrl + `data/games/${gameId}`)
+        .then(res => res.json())
 }

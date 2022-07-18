@@ -31,7 +31,7 @@ function App() {
       <main id="main-content">
         <Routes>
           <Route path="/" element={<Home games={games} />} />
-          <Route path="/catalogue" element={<Catalogue />} />
+          <Route path="/catalogue" element={<Catalogue games={games} />} />
           <Route path="/catalogue/:gameId" element={<GameDetails />} />
           <Route path="/create" element={<CreateGame />} />
           <Route path="/login" element={<Login />} />
