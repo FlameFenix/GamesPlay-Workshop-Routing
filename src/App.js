@@ -23,6 +23,25 @@ function App() {
       .then(games => setGames(games))
   }, [])
 
+  const addGameComment = (gameId, comment) => {
+
+    setGames(state => {
+
+      const game = games.find(x => x._id === gameId);
+
+      const comments = game.comments || [];
+
+      comments.push(comment);
+
+      return [
+        ...state.filter(x => x._id !== gameId),
+        {...game, comments: comments}
+      ]
+    })
+
+
+  }
+
   return (
     <div>
 
@@ -32,7 +51,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home games={games} />} />
           <Route path="/catalogue" element={<Catalogue games={games} />} />
-          <Route path="/catalogue/:gameId" element={<GameDetails />} />
+          <Route path="/catalogue/:gameId" element={<GameDetails addGameComment={addGameComment} />} />
           <Route path="/create" element={<CreateGame />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

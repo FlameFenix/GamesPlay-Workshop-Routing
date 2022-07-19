@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import * as gameService from '../../services/gameService'
 
-export const GameDetails = () => {
+export const GameDetails = ({ addGameComment }) => {
 
     const [game, setGame] = useState([]);
+
+    const [comment, setComment] = useState({
+        username: '',
+        comment: ''
+    });
 
     let params = useParams();
 
@@ -12,8 +17,22 @@ export const GameDetails = () => {
         gameService.getOne(params.gameId)
             .then(game => {
                 setGame(game)
+                console.log(game);
             })
     }, []);
+
+    const inputHandler = (e) => {
+        setComment(state => ({
+            ...state,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const addCommentHandler = (e) => {
+        e.preventDefault();
+        addGameComment(game._id, `${comment.username}: ${comment.comment}`)
+        console.log(game._id, comment);
+    }
 
     return (
         <section id="game-details">
@@ -57,16 +76,24 @@ export const GameDetails = () => {
             {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
             <article className="create-comment">
                 <label>Add new comment:</label>
-                <form className="form">
+                <form className="form" onSubmit={addCommentHandler}>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        value={comment.username}
+                        onChange={inputHandler}
+                    />
                     <textarea
                         name="comment"
                         placeholder="Comment......"
-                        defaultValue={""}
+                        value={comment.comment}
+                        onChange={inputHandler}
                     />
                     <input
                         className="btn submit"
                         type="submit"
-                        defaultValue="Add Comment"
+                        value="Add Comment"
                     />
                 </form>
             </article>
