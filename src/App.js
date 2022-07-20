@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom'
 
 import * as gameService from './services/gameService'
+import { EditGame } from './components/EditGame/EditGame';
 
 function App() {
 
@@ -35,7 +36,7 @@ function App() {
 
       return [
         ...state.filter(x => x._id !== gameId),
-        {...game, comments: comments}
+        { ...game, comments: comments }
       ]
     })
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/" element={<Home games={games} />} />
           <Route path="/catalogue" element={<Catalogue games={games} />} />
           <Route path="/catalogue/:gameId" element={<GameDetails addGameComment={addGameComment} />} />
+          <Route path="/edit/:gameId" element={<EditGame />} />
           <Route path="/create" element={<CreateGame />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

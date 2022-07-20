@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import * as gameService from '../../services/gameService'
 
 export const GameDetails = ({ addGameComment }) => {
@@ -64,9 +64,9 @@ export const GameDetails = ({ addGameComment }) => {
                 </div>
                 {/* Edit/Delete buttons ( Only for creator of this game )  */}
                 <div className="buttons">
-                    <a href="#" className="button">
+                    <Link to={`/edit/${game._id}`} className="button">
                         Edit
-                    </a>
+                    </Link>
                     <a href="#" className="button">
                         Delete
                     </a>
