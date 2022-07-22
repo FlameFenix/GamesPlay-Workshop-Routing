@@ -18,12 +18,7 @@ import { EditGame } from './components/EditGame/EditGame';
 function App() {
 
   const [games, setGames] = useState([]);
-
-  useEffect(() => {
-    gameService.getAll()
-      .then(games => setGames(games))
-  }, [])
-
+  
   const addGameComment = (gameId, comment) => {
 
     setGames(state => {
@@ -34,14 +29,22 @@ function App() {
 
       comments.push(comment);
 
+      console.log(game);
       return [
         ...state.filter(x => x._id !== gameId),
-        { ...game, comments: comments }
+        { ...game, comments }
       ]
     })
 
 
   }
+
+  useEffect(() => {
+    gameService.getAll()
+      .then(games => setGames(games))
+  }, [])
+
+
 
   return (
     <div>
@@ -52,8 +55,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home games={games} />} />
           <Route path="/catalogue" element={<Catalogue games={games} />} />
-          <Route path="/catalogue/:gameId" element={<GameDetails addGameComment={addGameComment} />} />
-          <Route path="/edit/:gameId" element={<EditGame games={games}/>} />
+          <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
+          <Route path="/edit/:gameId" element={<EditGame games={games} />} />
           <Route path="/create" element={<CreateGame />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
