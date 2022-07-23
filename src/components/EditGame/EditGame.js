@@ -1,25 +1,21 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-export const EditGame = ({ games }) => {
+export const EditGame = ({ games, editGameHandler }) => {
+
+    const { gameId } = useParams();
+
+    const game = games.find(x => x._id === gameId);
 
     const [values, setValues] = useState({
+        _id: game._id,
+        title: game.title,
+        category: game.category,
+        maxLevel: game.maxLevel,
+        imageUrl: game.imageUrl,
+        summary: game.summary,
+        comments: game.comments
     });
-
-    const params = useParams();
-
-    const game = games.find(x => x._id === params.gameId);
-
-    useEffect(() => {
-        setValues(state => ({
-            ...state,
-            title: game.title,
-            category: game.category,
-            imageUrl: game.imageUrl,
-            maxLevel: game.maxLevel,
-            summary: game.summary
-        }))
-    }, [])
 
     const valuesChangeHandler = (e) => {
         setValues(state => ({
@@ -29,30 +25,30 @@ export const EditGame = ({ games }) => {
         }))
     }
 
-    const editGameHandler = (e) => {
+    const editGame = (e) => {
         e.preventDefault();
-        console.log(values);
+        editGameHandler(game._id, values);
     }
 
     return (
         <section id="edit-page" className="auth">
-            <form id="edit" onSubmit={editGameHandler}>
+            <form id="edit" onSubmit={editGame}>
                 <div className="container">
                     <h1>Edit Game</h1>
-                    <label htmlFor="leg-title">Legendary title:</label>
+                    <label htmlFor="title">Legendary title:</label>
                     <input type="text" id="title" name="title" value={values.title} onChange={valuesChangeHandler} />
                     <label htmlFor="category">Category:</label>
                     <input type="text" id="category" name="category" value={values.category} onChange={valuesChangeHandler} />
-                    <label htmlFor="levels">MaxLevel:</label>
+                    <label htmlFor="maxLevel">MaxLevel:</label>
                     <input
                         type="number"
                         id="maxLevel"
                         name="maxLevel"
                         min={1}
-                        value={game.maxLevel}
+                        value={values.maxLevel}
                         onChange={valuesChangeHandler}
                     />
-                    <label htmlFor="game-img">Image:</label>
+                    <label htmlFor="imageUrl">Image:</label>
                     <input type="text" id="imageUrl" name="imageUrl" value={values.imageUrl} onChange={valuesChangeHandler} />
                     <label htmlFor="summary">Summary:</label>
                     <textarea name="summary" id="summary" value={values.summary} onChange={valuesChangeHandler} />
