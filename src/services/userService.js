@@ -10,9 +10,26 @@ export const login = async (userData) => {
 
     })
 
+    if (res.ok) {
+        return res.json();
+    } else {
+        throw res.json();
+    }
+}
+
+export const register = async (userData) => {
+   const res = await fetch(baseUrl + '/register', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+
     if(res.ok) {
         return res.json();
     } else {
         throw res.json();
     }
+    
 }
