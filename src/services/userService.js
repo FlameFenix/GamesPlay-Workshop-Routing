@@ -18,7 +18,7 @@ export const login = async (userData) => {
 }
 
 export const register = async (userData) => {
-   const res = await fetch(baseUrl + '/register', {
+    const res = await fetch(baseUrl + '/register', {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
@@ -26,10 +26,14 @@ export const register = async (userData) => {
         body: JSON.stringify(userData)
     })
 
-    if(res.ok) {
+    if (res.ok) {
         return res.json();
     } else {
         throw res.json();
     }
-    
+
+}
+
+export function setUser(user) {
+    localStorage.setItem('user', JSON.stringify(user));
 }

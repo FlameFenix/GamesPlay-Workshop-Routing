@@ -19,6 +19,24 @@ function App() {
 
   const [games, setGames] = useState([]);
 
+  const [user, setUser] = useState({
+    email: '',
+    accessToken: ''
+  });
+
+  const userAuthentication = (userData) => {
+    console.log(userData);
+    setUser(state => ({
+      ...state,
+      userData
+    }));
+  }
+
+  const isAuthenticated = () => {
+    console.log(user);
+    return user.accessToken !== '' ? true : false
+  }
+
   const addGameComment = (gameId, comment) => {
 
     setGames(state => {
@@ -52,12 +70,10 @@ function App() {
       .then(games => setGames(games))
   }, [])
 
-
-
   return (
     <div>
 
-      <Header />
+      <Header isAuthenticated={isAuthenticated} />
 
       <main id="main-content">
         <Routes>
@@ -66,7 +82,7 @@ function App() {
           <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
           <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
           <Route path="/create" element={<CreateGame />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login userAuthentication={userAuthentication} />} />
           <Route path="/register" element={<Register />} />
         </Routes>
 

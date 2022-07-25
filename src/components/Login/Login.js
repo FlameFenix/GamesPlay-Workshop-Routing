@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import * as userService from '../../services/userService'
 
-export const Login = () => {
+export const Login = ({ userAuthentication }) => {
     const [formValues, setFormValues] = useState({
         email: '',
         password: ''
@@ -10,7 +10,13 @@ export const Login = () => {
 
     const loginHandler = (e) => {
         e.preventDefault();
-        userService.login(formValues).then(res => console.log(res));
+
+        userService.login(formValues)
+            .then(res => {
+                userService.setUser({ email: res.email, accessToken: res.accessToken });
+                userAuthentication({ email: res.email, accessToken: res.accessToken });
+            })
+            .catch(err => console.log(err.message));
     }
 
     const onChangeHandler = (e) => {
