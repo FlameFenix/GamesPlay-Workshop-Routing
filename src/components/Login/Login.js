@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import * as userService from '../../services/userService'
 
 export const Login = ({ userAuthentication }) => {
+
+    const navigate = useNavigate();
+
     const [formValues, setFormValues] = useState({
         email: '',
         password: ''
@@ -15,6 +18,7 @@ export const Login = ({ userAuthentication }) => {
             .then(res => {
                 userService.setUser({ email: res.email, accessToken: res.accessToken });
                 userAuthentication({ email: res.email, accessToken: res.accessToken });
+                navigate('/catalogue')
             })
             .catch(err => {
                 console.log(err)
