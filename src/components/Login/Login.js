@@ -16,7 +16,9 @@ export const Login = ({ userAuthentication }) => {
                 userService.setUser({ email: res.email, accessToken: res.accessToken });
                 userAuthentication({ email: res.email, accessToken: res.accessToken });
             })
-            .catch(err => console.log(err.message));
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     const onChangeHandler = (e) => {

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export const Header = ({ isAuthenticated }) => {
+export const Header = ({ email }) => {
 
     return (
         <header>
@@ -13,7 +13,7 @@ export const Header = ({ isAuthenticated }) => {
             <nav>
                 <Link to="catalogue">All games</Link>
                 {/* Logged-in users */}
-                {isAuthenticated &&
+                {email &&
                     <div id="user">
                         <Link to="create">Create Game</Link>
                         <Link to="logout">Logout</Link>
@@ -21,11 +21,12 @@ export const Header = ({ isAuthenticated }) => {
                 }
 
                 {/* Guest users */}
-
-                <div id="guest">
-                    <Link to="login">Login</Link>
-                    <Link to="register">Register</Link>
-                </div>
+                {!email &&
+                    <div id="guest">
+                        <Link to="login">Login</Link>
+                        <Link to="register">Register</Link>
+                    </div>
+                }
             </nav>
         </header>
     );

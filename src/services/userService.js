@@ -24,12 +24,14 @@ export const register = async (userData) => {
             'content-type': 'application/json'
         },
         body: JSON.stringify(userData)
-    })
+    });
+
+    const jsonResult = await res.json();
 
     if (res.ok) {
-        return res.json();
+        return jsonResult;
     } else {
-        throw res.json();
+        throw jsonResult;
     }
 
 }

@@ -8,6 +8,7 @@ import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
 import { Catalogue } from './components/Catalogue/Catalogue';
 import { GameDetails } from './components/GameDetails/GameDetails';
+import { AuthContext } from './contexts/AuthContext';
 
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom'
@@ -20,21 +21,14 @@ function App() {
   const [games, setGames] = useState([]);
 
   const [user, setUser] = useState({
-    email: '',
-    accessToken: ''
+    email: ''
   });
 
   const userAuthentication = (userData) => {
-    console.log(userData);
     setUser(state => ({
       ...state,
-      userData
+      email: userData.email,
     }));
-  }
-
-  const isAuthenticated = () => {
-    console.log(user);
-    return user.accessToken !== '' ? true : false
   }
 
   const addGameComment = (gameId, comment) => {
@@ -71,24 +65,26 @@ function App() {
   }, [])
 
   return (
-    <div>
+    <AuthContext.Provider value={true}>
+      <div>
 
-      <Header isAuthenticated={isAuthenticated} />
+        <Header email={user.email} />
 
-      <main id="main-content">
-        <Routes>
-          <Route path="/" element={<Home games={games} />} />
-          <Route path="/catalogue" element={<Catalogue games={games} />} />
-          <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
-          <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
-          <Route path="/create" element={<CreateGame />} />
-          <Route path="/login" element={<Login userAuthentication={userAuthentication} />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        <main id="main-content">
+          <Routes>
+            <Route path="/" element={<Home games={games} />} />
+            <Route path="/catalogue" element={<Catalogue games={games} />} />
+            <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
+            <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
+            <Route path="/create" element={<CreateGame />} />
+            <Route path="/login" element={<Login userAuthentication={userAuthentication} />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
 
-      </main>
+        </main>
 
-    </div>
+      </div>
+    </AuthContext.Provider>
   );
 }
 
