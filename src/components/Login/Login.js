@@ -16,8 +16,7 @@ export const Login = ({ userAuthentication }) => {
 
         userService.login(formValues)
             .then(res => {
-                userService.setUser({ email: res.email, accessToken: res.accessToken });
-                userAuthentication({ email: res.email, accessToken: res.accessToken });
+                // userService.setUser({ email: res.email, accessToken: res.accessToken });
                 navigate('/catalogue')
             })
             .catch(err => {
