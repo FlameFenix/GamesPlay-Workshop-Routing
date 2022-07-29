@@ -8,7 +8,9 @@ import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
 import { Catalogue } from './components/Catalogue/Catalogue';
 import { GameDetails } from './components/GameDetails/GameDetails';
+
 import { AuthContext } from './contexts/AuthContext';
+import { GameContext } from './contexts/GameContext';
 
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom'
@@ -20,15 +22,14 @@ function App() {
 
   const [games, setGames] = useState([]);
 
-  const [user, setUser] = useState({
-    email: ''
-  });
+  const [user, setUser] = useState({});
 
-  const userAuthentication = (userData) => {
+  const userLogin = (userData) => {
     setUser(state => ({
       ...state,
-      email: userData.email,
+      ...userData
     }));
+
   }
 
   const addGameComment = (gameId, comment) => {
@@ -65,22 +66,23 @@ function App() {
   }, [])
 
   return (
-    <AuthContext.Provider value={true}>
+    <AuthContext.Provider value={{ user: user, userLogin }}>
       <div>
 
         <Header email={user.email} />
 
         <main id="main-content">
-          <Routes>
-            <Route path="/" element={<Home games={games} />} />
-            <Route path="/catalogue" element={<Catalogue games={games} />} />
-            <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
-            <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
-            <Route path="/create" element={<CreateGame />} />
-            <Route path="/login" element={<Login userAuthentication={userAuthentication} />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-
+          <GameContext.Provider value={true}>
+            <Routes>
+              <Route path="/" element={<Home games={games} />} />
+              <Route path="/catalogue" element={<Catalogue games={games} />} />
+              <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
+              <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
+              <Route path="/create" element={<CreateGame />} />
+              <Route path="/login" element={<Login userAuthentication={userLogin} />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </GameContext.Provider>
         </main>
 
       </div>

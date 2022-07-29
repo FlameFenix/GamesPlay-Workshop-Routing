@@ -1,34 +1,32 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+
+import { AuthContext } from '../../contexts/AuthContext';
+
 import * as userService from '../../services/userService'
 
-export const Login = ({ userAuthentication }) => {
-
+export const Login = () => {
     const navigate = useNavigate();
 
-    const [formValues, setFormValues] = useState({
-        email: '',
-        password: ''
-    });
+    const { userLogin } = useContext(AuthContext);
 
     const loginHandler = (e) => {
         e.preventDefault();
 
-        userService.login(formValues)
+        const {
+            email,
+            password,
+        } = Object.fromEntries(new FormData(e.target));
+
+        userService.login({ email, password })
             .then(res => {
-                // userService.setUser({ email: res.email, accessToken: res.accessToken });
+                userLogin(res)
                 navigate('/catalogue')
             })
             .catch(err => {
-                console.log(err)
+                console.log(err);
+                navigate('/404');
             });
-    }
-
-    const onChangeHandler = (e) => {
-        setFormValues(state => ({
-            ...state,
-            [e.target.name]: e.target.value
-        }))
     }
 
     return (
@@ -42,8 +40,6 @@ export const Login = ({ userAuthentication }) => {
                         type="email"
                         id="email"
                         name="email"
-                        value={formValues.email}
-                        onChange={onChangeHandler}
                         placeholder="Sokka@gmail.com"
                     />
                     <label htmlFor="login-pass">Password:</label>
@@ -51,8 +47,6 @@ export const Login = ({ userAuthentication }) => {
                         type="password"
                         id="password"
                         name="password"
-                        value={formValues.password}
-                        onChange={onChangeHandler}
                     />
 
                     <input type="submit" className="btn submit" value="Login" />
