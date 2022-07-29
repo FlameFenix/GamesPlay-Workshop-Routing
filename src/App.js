@@ -13,12 +13,15 @@ import { AuthContext } from './contexts/AuthContext';
 import { GameContext } from './contexts/GameContext';
 
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 
 import * as gameService from './services/gameService'
 import { EditGame } from './components/EditGame/EditGame';
+import { Logout } from './components/Logout/Logout';
 
 function App() {
+
+  const navigate = useNavigate();
 
   const [games, setGames] = useState([]);
 
@@ -28,8 +31,13 @@ function App() {
     setUser(state => ({
       ...state,
       ...userData
-    }));
+    }),
+      localStorage.setItem('user', JSON.stringify(userData)));
+  }
 
+  const userLogout = () => {
+    setUser({});
+    navigate('/');
   }
 
   const addGameComment = (gameId, comment) => {
@@ -66,7 +74,7 @@ function App() {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user: user, userLogin }}>
+    <AuthContext.Provider value={{ user: user, userLogin, userLogout }}>
       <div>
 
         <Header email={user.email} />
@@ -80,6 +88,7 @@ function App() {
               <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
               <Route path="/create" element={<CreateGame />} />
               <Route path="/login" element={<Login userAuthentication={userLogin} />} />
+              <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
             </Routes>
           </GameContext.Provider>
