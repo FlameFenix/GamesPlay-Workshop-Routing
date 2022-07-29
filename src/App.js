@@ -37,6 +37,7 @@ function App() {
 
   const userLogout = () => {
     setUser({});
+    localStorage.clear();
     navigate('/');
   }
 

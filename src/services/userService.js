@@ -14,6 +14,18 @@ export const register = async (userData) => {
     return res;
 }
 
+export const logout = async (accessToken) => {
+    try {
+        const res = await fetch(`${baseUrl}/logout`, {
+            headers: {
+                'X-Authorization': accessToken
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export function setUser(user) {
     localStorage.setItem('user', JSON.stringify(user));
 }
