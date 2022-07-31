@@ -1,9 +1,18 @@
-const request = async (method, url, data) => {
+const request = async (method, url, data, accessToken) => {
     try {
         let buildRequest;
 
         if (method === 'GET') {
             buildRequest = fetch(url);
+        } else if (accessToken) {
+            buildRequest = fetch(url, {
+                method,
+                headers: {
+                    'X-Authorization': accessToken,
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
         } else {
             buildRequest = fetch(url, {
                 method,
