@@ -3,6 +3,7 @@ import './App.css';
 import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
 
+import PrivateRoute from './components/common/PrivateRoute';
 import { CreateGame } from './components/CreateGame/CreateGame';
 import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
@@ -75,7 +76,7 @@ function App() {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user: user, userLogin, userLogout }}>
+    <AuthContext.Provider value={{ user: user, userLogin, userLogout, isAuthenticated: !!user.accessToken }}>
       <div>
 
         <Header email={user.email} />
@@ -86,17 +87,19 @@ function App() {
               <Route path="/" element={<Home games={games} />} />
               <Route path="/catalogue" element={<Catalogue games={games} />} />
               <Route path="/catalogue/:gameId" element={<GameDetails games={games} addGameComment={addGameComment} />} />
-              <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
-              <Route path="/create" element={<CreateGame />} />
               <Route path="/login" element={<Login userAuthentication={userLogin} />} />
-              <Route path="/logout" element={<Logout />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/edit/:gameId" element={<EditGame games={games} editGameHandler={editGameHandler} />} />
+                <Route path="/create" element={<CreateGame />} />
+              </Route>
               <Route path="/register" element={<Register />} />
             </Routes>
           </GameContext.Provider>
         </main>
 
       </div>
-    </AuthContext.Provider>
+    </AuthContext.Provider >
   );
 }
 
