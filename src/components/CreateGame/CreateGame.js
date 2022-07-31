@@ -1,7 +1,27 @@
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import * as gameService from "../../services/gameService";
+
 export const CreateGame = () => {
+    const { user } = useContext(AuthContext);
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+
+        const  {
+            title,
+            category,
+            maxLevel,
+            imageUrl,
+            summary
+        } = Object.fromEntries(new FormData(e.target));
+
+        gameService.createGame(user.accessToken, { title, category, maxLevel, imageUrl, summary });
+    }
+
     return (
         <section id="create-page" className="auth">
-            <form id="create">
+            <form id="create" onSubmit={onSubmit}>
                 <div className="container">
                     <h1>Create Game</h1>
                     <label htmlFor="leg-title">Legendary title:</label>
