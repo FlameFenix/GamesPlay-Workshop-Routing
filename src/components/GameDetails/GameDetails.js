@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useParams } from 'react-router-dom'
+import { AuthContext } from '../../contexts/AuthContext';
+
 export const GameDetails = ({ addGameComment, games }) => {
 
     const [comment, setComment] = useState({
         username: '',
         comment: ''
     });
+
+    const { user } = useContext(AuthContext);
 
     const { gameId } = useParams();
 
@@ -50,43 +54,45 @@ export const GameDetails = ({ addGameComment, games }) => {
                         {!game.comments &&
                             < p className="no-comment">No comments.</p>
                         }
-                </ul>
+                    </ul>
+                </div>
+                {/* Edit/Delete buttons ( Only for creator of this game )  */}
+                {user._id === game._ownerId &&
+                    <div className="buttons">
+                        <Link to={`/edit/${gameId}`} className="button">
+                            Edit
+                        </Link>
+                        <Link to="Delete" className="button">
+                            Delete
+                        </Link>
+                    </div>
+                }
             </div>
-            {/* Edit/Delete buttons ( Only for creator of this game )  */}
-            <div className="buttons">
-                <Link to={`/edit/${gameId}`} className="button">
-                    Edit
-                </Link>
-                <Link to="Delete" className="button">
-                    Delete
-                </Link>
-            </div>
-        </div>
-            {/* Bonus */ }
-    {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */ }
-    <article className="create-comment">
-        <label>Add new comment:</label>
-        <form className="form" onSubmit={addCommentHandler}>
-            <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                value={comment.username}
-                onChange={inputHandler}
-            />
-            <textarea
-                name="comment"
-                placeholder="Comment......"
-                value={comment.comment}
-                onChange={inputHandler}
-            />
-            <input
-                className="btn submit"
-                type="submit"
-                value="Add Comment"
-            />
-        </form>
-    </article>
+            {/* Bonus */}
+            {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
+            <article className="create-comment">
+                <label>Add new comment:</label>
+                <form className="form" onSubmit={addCommentHandler}>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        value={comment.username}
+                        onChange={inputHandler}
+                    />
+                    <textarea
+                        name="comment"
+                        placeholder="Comment......"
+                        value={comment.comment}
+                        onChange={inputHandler}
+                    />
+                    <input
+                        className="btn submit"
+                        type="submit"
+                        value="Add Comment"
+                    />
+                </form>
+            </article>
         </section >
     );
 }

@@ -7,6 +7,7 @@ export const EditGame = ({ games, editGameHandler }) => {
 
     const game = games.find(x => x._id === gameId);
 
+    console.log(game);
     const [values, setValues] = useState({
         _id: game._id,
         title: game.title,
